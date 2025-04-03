@@ -29,12 +29,18 @@ jobs:
           GOOS=darwin GOARCH=arm64 go build -o new-callings-parser-mac-arm64
           chmod +x new-callings-parser-mac-arm64
 
+      - name: create-dmg-action
+        uses: QQxiaoming/create-dmg-action@v0.0.2
+        with:
+          name: NewCallingsParser.dmg
+          srcdir: new-callings-parser-mac-arm64
+
       # Upload both binaries as artifacts
       - name: Upload binaries
         uses: actions/upload-artifact@v4
         with:
           name: binaries
-          path: new-callings-parser-mac-arm64
+          path: NewCallingsParser.dmg
 
       # Create a GitHub Release
       - name: Create Release
@@ -54,8 +60,8 @@ jobs:
         uses: actions/upload-release-asset@v1.0.2
         with:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: new-callings-parser-mac-arm64
-          asset_name: new-callings-parser-mac-arm64
-          asset_content_type: application/octet-stream
+          asset_path: NewCallingsParser.dmg
+          asset_name: NewCallingsParser.dmg
+          asset_content_type: application/x-apple-diskimage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
