@@ -1,9 +1,9 @@
 name: Build and Upload Binary
 
 on:
-    push:
-      tags:
-        - '*' # Matches all tags  
+  push:
+    tags:
+      - '*' # Matches all tags  
 
 jobs:
   build:
@@ -12,24 +12,21 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Set up Go environment
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.20  # Adjust to your Go version
+          go-version: 1.24.1  # Adjust to your Go version
 
       # Cross-compile the binary for macOS on ARM64 (Apple Silicon)
       - name: Cross-compile for macOS (Apple Silicon)
-        run: |
-          GOOS=darwin GOARCH=arm64 go build -o new-callings-parser-mac-arm64
+        run: GOOS=darwin GOARCH=arm64 go build -o new-callings-parser-mac-arm64
 
-      # Upload both binaries as artifacts
+     # Upload both binaries as artifacts
       - name: Upload binaries
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: binaries
-          path: |
-            new-callings-parser
-            new-callings-parser-mac-arm64
+          path: new-callings-parser-mac-arm64
