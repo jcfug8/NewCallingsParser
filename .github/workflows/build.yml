@@ -5,6 +5,9 @@ on:
     tags:
       - '*' # Matches all tags  
 
+permissions:
+  contents: write  # Grant write permissions to create releases
+
 jobs:
   build:
     runs-on: ubuntu-latest
