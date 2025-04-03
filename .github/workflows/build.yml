@@ -28,12 +28,19 @@ jobs:
         run: |
           GOOS=darwin GOARCH=arm64 go build -o new-callings-parser-mac-arm64
           chmod +x new-callings-parser-mac-arm64
-
-      - name: create-dmg-action
-        uses: QQxiaoming/create-dmg-action@v0.0.2
-        with:
-          name: NewCallingsParser.dmg
-          srcdir: new-callings-parser-mac-arm64
+          mkdir test
+          mv new-callings-parser-mac-arm64 test/new-callings-parser-mac-arm64
+          
+          - name: create-dmg-action
+          uses: QQxiaoming/create-dmg-action@v0.0.2
+          with:
+            name: NewCallingsParser.dmg
+            srcdir: test
+            
+      # Cross-compile the binary for macOS on ARM64 (Apple Silicon)
+      - name: Listing Files
+        run: |
+          ls
 
       # Upload both binaries as artifacts
       - name: Upload binaries
