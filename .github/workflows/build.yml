@@ -1,12 +1,9 @@
 name: Build and Upload Binary
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    push:
+      tags:
+        - '*' # Matches all tags  
 
 jobs:
   build:
@@ -23,14 +20,16 @@ jobs:
         with:
           go-version: 1.20  # Adjust to your Go version
 
-      # Build the binary
-      - name: Build binary
+      # Cross-compile the binary for macOS on ARM64 (Apple Silicon)
+      - name: Cross-compile for macOS (Apple Silicon)
         run: |
-          go build -o new-callings-parser
+          GOOS=darwin GOARCH=arm64 go build -o new-callings-parser-mac-arm64
 
-      # Upload the binary as an artifact
-      - name: Upload binary
+      # Upload both binaries as artifacts
+      - name: Upload binaries
         uses: actions/upload-artifact@v3
         with:
-          name: new-callings-parser
-          path: new-callings-parser
+          name: binaries
+          path: |
+            new-callings-parser
+            new-callings-parser-mac-arm64
