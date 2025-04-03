@@ -30,6 +30,12 @@ jobs:
           chmod +x new-callings-parser-mac-arm64
           mkdir test
           mv new-callings-parser-mac-arm64 test/new-callings-parser-mac-arm64
+            
+      # Cross-compile the binary for macOS on ARM64 (Apple Silicon)
+      - name: Listing Files
+        run: |
+          ls
+          ls test
           
       - name: create-dmg-action
         uses: QQxiaoming/create-dmg-action@v0.0.2
@@ -41,6 +47,8 @@ jobs:
       - name: Listing Files
         run: |
           ls
+          ls test
+          ls NewCallingsParser.dmg
 
       # Upload both binaries as artifacts
       - name: Upload binaries
