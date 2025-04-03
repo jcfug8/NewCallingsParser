@@ -25,7 +25,9 @@ jobs:
 
       # Cross-compile the binary for macOS on ARM64 (Apple Silicon)
       - name: Cross-compile for macOS (Apple Silicon)
-        run: GOOS=darwin GOARCH=arm64 go build -o new-callings-parser-mac-arm64
+        run: |
+          GOOS=darwin GOARCH=arm64 go build -o new-callings-parser-mac-arm64
+          chmod +x new-callings-parser-mac-arm64
 
       # Upload both binaries as artifacts
       - name: Upload binaries
