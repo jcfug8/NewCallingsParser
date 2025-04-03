@@ -24,39 +24,20 @@ jobs:
           go-version: 1.24.1  # Adjust to your Go version
 
       # Cross-compile the binary for macOS on ARM64 (Apple Silicon)
+      # make it executable
+      # zip it
       - name: Cross-compile for macOS (Apple Silicon)
         run: |
           GOOS=darwin GOARCH=arm64 go build -o new-callings-parser-mac-arm64
           chmod +x new-callings-parser-mac-arm64
-          mkdir test
-          mv new-callings-parser-mac-arm64 test/new-callings-parser-mac-arm64
-            
-      # Cross-compile the binary for macOS on ARM64 (Apple Silicon)
-      - name: Listing Files
-        run: |
-          ls -la
-          echo "==================="
-          ls -la test
-          
-      - name: create-dmg-action
-        uses: QQxiaoming/create-dmg-action@v0.0.2
-        with:
-          name: NewCallingsParser.dmg
-          srcdir: test
-            
-      # Cross-compile the binary for macOS on ARM64 (Apple Silicon)
-      - name: Listing Files
-        run: |
-          ls
-          ls test
-          ls NewCallingsParser.dmg
+          zip new-callings-parser-mac-arm64.zip new-callings-parser-mac-arm64
 
       # Upload both binaries as artifacts
       - name: Upload binaries
         uses: actions/upload-artifact@v4
         with:
           name: binaries
-          path: NewCallingsParser.dmg
+          path: new-callings-parser-mac-arm64.zip
 
       # Create a GitHub Release
       - name: Create Release
@@ -76,8 +57,8 @@ jobs:
         uses: actions/upload-release-asset@v1.0.2
         with:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
-          asset_path: NewCallingsParser.dmg
-          asset_name: NewCallingsParser.dmg
-          asset_content_type: application/x-apple-diskimage
+          asset_path: new-callings-parser-mac-arm64.zip
+          asset_name: new-callings-parser-mac-arm64.zip
+          asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
