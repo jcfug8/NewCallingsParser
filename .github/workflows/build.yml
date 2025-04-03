@@ -55,3 +55,5 @@ jobs:
           asset_path: new-callings-parser-mac-arm64
           asset_name: new-callings-parser-mac-arm64
           asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
