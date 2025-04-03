@@ -31,11 +31,11 @@ jobs:
           mkdir test
           mv new-callings-parser-mac-arm64 test/new-callings-parser-mac-arm64
           
-          - name: create-dmg-action
-          uses: QQxiaoming/create-dmg-action@v0.0.2
-          with:
-            name: NewCallingsParser.dmg
-            srcdir: test
+      - name: create-dmg-action
+        uses: QQxiaoming/create-dmg-action@v0.0.2
+        with:
+          name: NewCallingsParser.dmg
+          srcdir: test
             
       # Cross-compile the binary for macOS on ARM64 (Apple Silicon)
       - name: Listing Files
