@@ -36,7 +36,8 @@ jobs:
 
       # Create a GitHub Release
       - name: Create Release
-        uses: actions/create-release@v1
+        id: create-release
+        uses: actions/create-release@v1.1.4
         with:
           tag_name: ${{ github.ref_name }}
           release_name: Release ${{ github.ref_name }}
@@ -47,7 +48,8 @@ jobs:
 
       # Upload the binary as a release asset
       - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1.0.2
         with:
           upload_url: ${{ steps.create-release.outputs.upload_url }}
           asset_path: new-callings-parser-mac-arm64
