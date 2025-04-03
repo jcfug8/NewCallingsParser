@@ -26,4 +26,4 @@ go.work.sum
 
 callings.in.tsv
 callings.out.csv
-main
+NewCallingsParser
