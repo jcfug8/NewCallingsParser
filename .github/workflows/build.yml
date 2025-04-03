@@ -34,8 +34,9 @@ jobs:
       # Cross-compile the binary for macOS on ARM64 (Apple Silicon)
       - name: Listing Files
         run: |
-          ls
-          ls test
+          ls -la
+          echo "==================="
+          ls -la test
           
       - name: create-dmg-action
         uses: QQxiaoming/create-dmg-action@v0.0.2
