@@ -17,7 +17,8 @@ import (
 var (
 	inputFileName  = "callings.in.tsv"
 	outputFileName = "callings.out.csv"
-	columnCount    = 6
+	columnCount    = 4
+	numberOfMonths = 1
 )
 
 const (
@@ -41,12 +42,13 @@ type Record struct {
 }
 
 func main() {
+	printLogo()
 	// get the input file name from the user with a default value
 	execPath, err := os.Executable()
 	if err != nil {
 		log.Fatalf("error getting executable path: %v", err)
 	}
-	log.Println("Executable path:", execPath)
+	// log.Println("Executable path:", execPath)
 
 	// Check if the executable is in a temporary directory
 	if strings.Contains(execPath, os.TempDir()) {
@@ -76,9 +78,17 @@ func main() {
 		if err != nil {
 			log.Fatalf("please enter a number for the number of columns: %v", err)
 		}
+
+		fmt.Print("How many months back do you want to filter?: ")
+		numberOfMonthsString, _ := reader.ReadString('\n')
+		numberOfMonths, err = strconv.Atoi(strings.TrimSpace(numberOfMonthsString))
+		if err != nil {
+			log.Fatalf("please enter a number for the number of months: %v", err)
+		}
+		numberOfMonths = numberOfMonths - 1
 	}
 
-	log.Printf("input file: %s", inputFileName)
+	// log.Printf("input file: %s", inputFileName)
 
 	log.Print("reading file...")
 	file, err := os.Open(inputFileName)
@@ -95,7 +105,7 @@ func main() {
 
 	log.Print("filtering records...")
 	// filter records by calling date
-	from := time.Date(time.Now().Year(), time.Now().Month()-2, 1, 0, 0, 0, 0, time.Local)
+	from := time.Date(time.Now().Year(), time.Now().Month()-time.Month(numberOfMonths), 1, 0, 0, 0, 0, time.Local)
 	to := time.Date(time.Now().Year(), time.Now().Month(), 31, 23, 59, 59, 0, time.Local)
 	records = filterRecordsByCallingDate(records, from, to)
 
@@ -107,6 +117,50 @@ func main() {
 	}
 
 	log.Print("done")
+}
+
+func printLogo() {
+	// blue backgorund and white text
+	fmt.Println("\033[44;37m")
+	fmt.Println("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY55PP")
+	fmt.Println("PPP55555555YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY555PPGGGG")
+	fmt.Println("PPPPPPPPPPPPPPP5555555YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY55555PPPGGGGGGG")
+	fmt.Println("PPPPPPPPPPPPPPPPPPPPPPPPPP55555555YYYYYYYYYYYYYYYYYYYYY55555PPPPPPGGGGGGGGG")
+	fmt.Println("PPPPPPPPPPPPPPPPPPPPPPPPPPPPP5YJ????7777777?JYY555555555555PPPPGGGGGGGGGGGG")
+	fmt.Println("PPPPPPPPPPPPPPPPPPPPPPPPPP5J77?JY55PPPPPP55YJ??J5GGPPPPPPPPGGPPPPPPPPPGGGGG")
+	fmt.Println("PPPPPPPPPPPPPPPPPPPPPPPPY77J5PPPPPPPPPPGGGGBBBG5??YGBGBBBBBBBBGGGGGGGGGPPPP")
+	fmt.Println("PPPPPPPPPPPPPPPPPPPPPP5!75PPPPPPPPGGGGGBGGGGGGGGBPJ7P#BBBBBBBBBBBBBBBBBBBGG")
+	fmt.Println("PPPPPPPPPPPPPPPPPPPPPJ~YPPPPPGGGGGGP77!YGGGGGGGGBB#G!Y#BBBBBBBBBBBBBBBBBBBB")
+	fmt.Println("PPPPPPPPPPPPPPPPPPPPJ~PGGGGGGGGGGGG7~:~JPGGGGBBBBBBBB!Y#BBBBBBBBBBBBBBBBBBB")
+	fmt.Println("PPPPPPPPPPPPPPPPPPGP^5BGGGGGGGGGGB57~^~Y?GBBBBBBBBBBBB^PBBBBBBBBBBBBBBBBBBB")
+	fmt.Println("PPPPPPPPPPPPGGGGGGBJ!BGGGGGGGGGGG5~!^^75??5BBBBBBBBBB#??#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("PPPPPPGGGGGGGGGGGGB7?BGGGGGGGGB5!^.   ~^^???BBBBBBBBB#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("PGGGGGGGGGGGGGGGGGB7?BGGGGGGGBY^^7. :~:^7.?!JGBBBBBBB#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("GGGGGGGGGGGGGGGGGGB7?BGGGGBBP! :??~^::!7: !.:JG#BBBBB#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("GGGGGGGGGGGGGGGGGGB7?BGG55Y!:^J5~^.:!?7^~ !:.?.?GBGBB#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("GGGGGGGGGGGGGGGGGGB7?BY~!7?5P~~7!~!77~.:! ~~:PY77J5P5B5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("GGGGGGGGGGGGGGGGGGB7?BGGBB##B:.!^~!!!. !: :!!!7:GBBPP#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("GGGGGGGGGGGGGGGGGGB7J#BBBBBB#Y ^!~^!^  7. .Y!:! Y#BBB#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("GGGGGGGGGGGGGGGBBB#7J#BBBBBBB#5!^!7:  :7  .G!:! 7#BBB#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("GGGGGGGGGGGGBBBBBB#7J#BBBBBBBBB##J    7^  .P::~ ?#BBB#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("GGGGGGGGGBBBBBBBBB#7J#BBBBBBBBBB#7   .J   :! .: 5#BBB#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("GGGGGGBBBBBBBBBBBB#7J#BBBBBBBBBB#!   ?7   ^7   :BBBBB#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("GGGBBBBBBBBBBBBBBB#7J#BBBBBBBBBBB:  :5.   ~? .^.BBBBB#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("BBBBBBBBBBBBBBBBBB#7J#BBBBBBBBBBG.  Y~    ?P~~?.GBBBB#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("BBBBBBBBBBBBBBBBBB#7J#BBBBBBBBBBP..7~   :!5#BBB?GBBBB#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("BBBBBBBBBBBBBBBBBB#7J#BBBBBBBBB#Y ^. :~YG?J#BBBBBBBBB#5!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("BBBBBBBBBBBBBBBBBB#7J#####BBB###J~7?5!!#P^G#BBB#######5~#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("BBBBBBBBBBBBBBBBBB#?75YYYYYYYYY7:!55Y:.7Y??YYYYYYYYYY5?!#BBBBBBBBBBBBBBBBBB")
+	fmt.Println("BBBBBBBBBBBBBBBBBBBGPPPPPPPPPPPPGGPPPGGPPGPPPPPPPPPPPPPGBBBBBBBBBBBBBBBBBBB")
+	fmt.Println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+	fmt.Println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+	fmt.Println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+	fmt.Println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+	fmt.Println("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
+	// change text back to default
+	// fmt.Println("\033[0m")
+	fmt.Println("Welcome to the Callings Parser!")
+	fmt.Println("This program will parse a tab delimited file of callings and output a csv file.")
 }
 
 func parseRecords(file *os.File) ([]Record, error) {
